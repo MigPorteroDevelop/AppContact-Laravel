@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Contact;
+use GuzzleHttp\Promise\Create;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response as HttpResponse;
 use Illuminate\Support\Facades\Response;
 
 class ContactController extends Controller
@@ -26,7 +26,7 @@ class ContactController extends Controller
      */
     public function create()
     {
-        return view('contact');
+        return view('contacts.create');
     }
 
     /**
@@ -37,20 +37,16 @@ class ContactController extends Controller
      */
     public function store(Request $request)
     {
-        /*if(is_null($request->get('name'))){
-            return response()->redirectTo('/contacts/create')->withErrors([
-                'name' => 'This field is required',
-            ]);
-        }*/
-
-        $request->validate([
+        $data = $request->validate([
             'name' => 'required',
-            'phone_number' => 'required' | 'digits:11',
-            'email' => 'required' | 'email',
-            'age' => 'required' | 'numeric' | 'min:1' | 'max:120',
+            'email' => 'required|email',
+            'phone_number' => 'required|digits:9',
+            'age' => 'required|numeric|min:1|max:255',
         ]);
 
-        return response("Contact created");
+        Contact::create($data);
+
+        return redirect()->route('home');
     }
 
     /**
@@ -72,7 +68,7 @@ class ContactController extends Controller
      */
     public function edit(Contact $contact)
     {
-        //
+        return view('contacts.edit', compact('contact'));
     }
 
     /**
@@ -84,7 +80,16 @@ class ContactController extends Controller
      */
     public function update(Request $request, Contact $contact)
     {
-        //
+        $data = $request->validate([
+            'name' => 'required',
+            'email' => 'required|email',
+            'phone_number' => 'required|digits:9',
+            'age' => 'required|numeric|min:1|max:255',
+        ]);
+
+        $contact->update($data);
+
+        return redirect()->route('home');
     }
 
     /**
