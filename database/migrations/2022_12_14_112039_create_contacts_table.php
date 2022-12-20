@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('phone_number');
             $table->string('email');
             $table->tinyInteger('age', false, true);
+            //Crea una "foreign key" para la tabla de usuarios
+            $table->foreignIdFor(User::class);
             $table->timestamps();
         });
     }
