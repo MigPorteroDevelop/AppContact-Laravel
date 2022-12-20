@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Contact;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class ContactController extends Controller
 {
@@ -56,7 +57,9 @@ class ContactController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show(Contact $contact)
-    {
+    { 
+        //Método para verificar si un usuario tiene permiso para realizar una determinada acción
+        $this->authorize('view', $contact);
         return view('contacts.show', compact('contact'));
     }
 
@@ -68,6 +71,7 @@ class ContactController extends Controller
      */
     public function edit(Contact $contact)
     {
+        $this->authorize('update', $contact);
         return view('contacts.edit', compact('contact'));
     }
 
@@ -87,6 +91,7 @@ class ContactController extends Controller
             'age' => 'required|numeric|min:1|max:255',
         ]);
 
+        $this->authorize('update', $contact);
         $contact->update($data);
 
         return redirect()->route('home');
@@ -100,6 +105,7 @@ class ContactController extends Controller
      */
     public function destroy(Contact $contact)
     {
+        $this->authorize('delete', $contact);
         $contact->delete();
 
         return redirect()->route('home');
