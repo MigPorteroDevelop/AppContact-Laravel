@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreContactRequest;
 use App\Models\Contact;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 
 class ContactController extends Controller
 {
@@ -13,6 +12,7 @@ class ContactController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
     public function index()
     {
         $contacts = auth()->user()->contacts;
@@ -36,14 +36,9 @@ class ContactController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreContactRequest $request)
     {
-        $data = $request->validate([
-            'name' => 'required',
-            'email' => 'required|email',
-            'phone_number' => 'required|digits:9',
-            'age' => 'required|numeric|min:1|max:255',
-        ]);
+        $data = $request->validated();
 
         auth()->user()->contacts()->create($data);
 
@@ -57,7 +52,7 @@ class ContactController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show(Contact $contact)
-    { 
+    {
         //Método para verificar si un usuario tiene permiso para realizar una determinada acción
         $this->authorize('view', $contact);
         return view('contacts.show', compact('contact'));
@@ -82,14 +77,9 @@ class ContactController extends Controller
      * @param  \App\Models\Contact  $contact
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Contact $contact)
+    public function update(StoreContactRequest $request, Contact $contact)
     {
-        $data = $request->validate([
-            'name' => 'required',
-            'email' => 'required|email',
-            'phone_number' => 'required|digits:9',
-            'age' => 'required|numeric|min:1|max:255',
-        ]);
+        $data = $request->validated();
 
         $this->authorize('update', $contact);
         $contact->update($data);
