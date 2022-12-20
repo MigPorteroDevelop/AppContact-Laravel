@@ -59,7 +59,10 @@
                             @endif
                         @else
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('contacts.create') }}">Create New Contact</a>
+                                <a class="nav-link" href="{{ route('contacts.index') }}">My Contacts</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('contacts.create') }}">New Contact</a>
                             </li>
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
